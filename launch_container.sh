@@ -1,0 +1,1 @@
+docker rm -f ft_server; docker build . -t ft_server_image; docker run -tid -p 80:80 -p 443:443 --name ft_server ft_server_image; docker-machine ip; docker exec -it ft_server bash

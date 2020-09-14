@@ -1,0 +1,46 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    localhost                                          :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: adorigo <adorigo@student.42.fr>            +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/03/02 14:49:42 by adorigo           #+#    #+#              #
+#    Updated: 2020/03/02 15:08:26 by adorigo          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+server{
+	listen 443 ssl ;
+	listen [::]:443 ssl ;
+
+	ssl_certificate /localhost.pem;
+	ssl_certificate_key /localhost-key.pem;
+
+	root /var/www/html;
+
+	autoindex	on;
+
+	index index.php index.html index.htm index.nginx-debian.html;
+
+	server_name 192.168.99.124 www.192.168.99.124;
+
+	location / {
+		try_files $uri $uri/ =404;
+	}
+
+	location ~ \.php$ {
+		include snippets/fastcgi-php.conf;
+		fastcgi_pass unix:/run/php/php7.3-fpm.sock;
+	}
+}
+
+server {
+    listen 80;
+	listen [::]:80;
+    server_name 192.168.99.124;
+
+	root /var/www/html;
+	
+    return 301 https://$host$request_uri;
+}
